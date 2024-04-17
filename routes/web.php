@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -50,6 +51,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('brand/data', [BrandController::class, 'data'])->name('brand.data');
     Route::resource('brand', BrandController::class)->except('create', 'edit', 'update');
+
+    Route::get('department/data', [DepartmentController::class, 'data'])->name('department.data');
+    Route::resource('department', DepartmentController::class)->except('create', 'edit', 'update');
 
     Route::get('vendor/data', [VendorController::class, 'data'])->name('vendor.data');
     Route::get('vendor/getById', [VendorController::class, 'getById'])->name('vendor.getById');
