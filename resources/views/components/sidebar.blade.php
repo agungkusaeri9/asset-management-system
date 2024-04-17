@@ -17,7 +17,21 @@
                 <div class="collapse" id="master_data">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('jenis.index') }}"> Jenis Barang </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('vendor.index') }}"> Vendor </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('brand.index') }}"> Brand </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.index') }}"> User </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('roles.index') }}"> Role </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('permissions.index') }}"> Permission </a>
                         </li>
                     </ul>

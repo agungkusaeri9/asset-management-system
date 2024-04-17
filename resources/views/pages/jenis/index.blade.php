@@ -5,8 +5,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h4 class="card-title mb-3">Permission</h4>
-                        @can('Permission Create')
+                        <h4 class="card-title mb-3">Jenis</h4>
+                        @can('jenisCreate')
                             <a href="javascript:void(0)" class="btn btn-sm btn-primary mb-3 btnAdd"><i class="fas fa-plus"></i>
                                 Tambah Data</a>
                         @endcan
@@ -17,7 +17,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Nama</th>
-                                    @canany(['Permission Edit', 'Permission Delete'])
+                                    @canany(['Jenis Edit', 'Jenis Delete'])
                                         <th>Aksi</th>
                                     @endcanany
                                 </tr>
@@ -48,8 +48,8 @@
                         @csrf
                         <input type="number" id="id" name="id" hidden>
                         <div class="form-group">
-                            <label for="name">Nama</label>
-                            <input type="text" class="form-control" name="name" id="name">
+                            <label for="nama">Nama</label>
+                            <input type="text" class="form-control" name="nama" id="nama">
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
             let otable = $('.dtTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('permissions.data') }}',
+                ajax: '{{ route('jenis.data') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -90,8 +90,8 @@
                         searchable: false
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'nama',
+                        name: 'nama'
                     },
                     {
                         data: 'action',
@@ -109,7 +109,7 @@
                 e.preventDefault();
                 let form = $('#myModal #myForm');
                 $.ajax({
-                    url: '{{ route('permissions.store') }}',
+                    url: '{{ route('jenis.store') }}',
                     type: 'POST',
                     dataType: 'JSON',
                     data: form.serialize(),
@@ -134,9 +134,9 @@
 
             $('body').on('click', '.btnEdit', function() {
                 let id = $(this).data('id');
-                let name = $(this).data('name');
+                let nama = $(this).data('nama');
                 $('#myForm #id').val(id);
-                $('#myForm #name').val(name);
+                $('#myForm #nama').val(nama);
                 $('#myModal .modal-title').text('Edit Data');
                 $('#myModal').modal('show');
             })
@@ -144,10 +144,10 @@
             $('body').on('click', '.btnDelete', function(e) {
                 e.preventDefault();
                 let id = $(this).data('id');
-                let name = $(this).data('name');
+                let nama = $(this).data('nama');
                 Swal.fire({
                     title: 'Apakah Yakin?',
-                    text: `${name} akan dihapus dan tidak bisa dikembalikan!`,
+                    text: `${nama} akan dihapus dan tidak bisa dikembalikan!`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -156,7 +156,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         var url =
-                            '{{ route('permissions.destroy', ':id') }}';
+                            '{{ route('jenis.destroy', ':id') }}';
                         url = url.replace(':id', id);
                         $.ajax({
                             url: url,

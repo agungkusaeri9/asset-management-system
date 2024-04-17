@@ -5,8 +5,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h4 class="card-title mb-3">Permission</h4>
-                        @can('Permission Create')
+                        <h4 class="card-title mb-3">User</h4>
+                        @can('User Create')
                             <a href="javascript:void(0)" class="btn btn-sm btn-primary mb-3 btnAdd"><i class="fas fa-plus"></i>
                                 Tambah Data</a>
                         @endcan
@@ -17,7 +17,9 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Nama</th>
-                                    @canany(['Permission Edit', 'Permission Delete'])
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    @canany(['User Edit', 'User Delete'])
                                         <th>Aksi</th>
                                     @endcanany
                                 </tr>
@@ -52,6 +54,27 @@
                             <input type="text" class="form-control" name="name" id="name">
                             <div class="invalid-feedback"></div>
                         </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" id="email">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select name="role" id="role" class="form-control"></select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" id="password">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password_confirmation">Konfirmasi Password</label>
+                            <input type="password" class="form-control" name="password_confirmation"
+                                id="password_confirmation">
+                            <div class="invalid-feedback"></div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -82,7 +105,7 @@
             let otable = $('.dtTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('permissions.data') }}',
+                ajax: '{{ route('users.data') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -94,6 +117,14 @@
                         name: 'name'
                     },
                     {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'roles',
+                        name: 'roles'
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -101,15 +132,58 @@
                     }
                 ]
             });
+
+
+            let getRoles = function(callback) {
+                $.ajax({
+                    url: '{{ route('roles.get') }}',
+                    dataType: 'JSON',
+                    type: 'POST',
+                    success: function(data) {
+                        callback(data);
+                    },
+                    error: function(err) {
+                        console.error(err);
+                        callback([]);
+                    }
+                });
+            };
+
+            let getUserDetail = function(user_id, callback) {
+                var url = '{{ route('users.show', ':id') }}';
+                url = url.replace(':id', user_id);
+                $.ajax({
+                    url: url,
+                    dataType: 'JSON',
+                    type: 'GET',
+                    success: function(data) {
+                        callback(data); // Panggil callback dengan data yang diterima dari server
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        callback(null); // Panggil callback dengan null jika terjadi kesalahan
+                    }
+                });
+            }
+
             $('.btnAdd').on('click', function() {
-                $('#myModal .modal-title').text('Tambah Data');
-                $('#myModal').modal('show');
-            })
+                getRoles(function(roles) {
+                    $('#role').empty();
+                    $('#role').append(`<option selected disabled>Pilih Role</option>`);
+                    roles.forEach(role => {
+                        $('#role').append(
+                            `<option value="${role.name}">${role.name}</option>`);
+                    });
+                    $('#myModal .modal-title').text('Tambah Data');
+                    $('#myModal').modal('show');
+                });
+            });
+
             $('#myModal #myForm').on('submit', function(e) {
                 e.preventDefault();
                 let form = $('#myModal #myForm');
                 $.ajax({
-                    url: '{{ route('permissions.store') }}',
+                    url: '{{ route('users.store') }}',
                     type: 'POST',
                     dataType: 'JSON',
                     data: form.serialize(),
@@ -134,12 +208,30 @@
 
             $('body').on('click', '.btnEdit', function() {
                 let id = $(this).data('id');
-                let name = $(this).data('name');
-                $('#myForm #id').val(id);
-                $('#myForm #name').val(name);
-                $('#myModal .modal-title').text('Edit Data');
-                $('#myModal').modal('show');
-            })
+                getUserDetail(id, function(user) {
+
+                    if (user) {
+                        $('#myForm #id').val(id);
+                        $('#myForm #name').val(user.name);
+                        $('#myForm #email').val(user.email);
+                        $('#role').empty();
+                        $('#role').append(`<option selected disabled>Pilih Role</option>`);
+                        getRoles(function(roles) {
+                            roles.forEach(role => {
+                                let isSelected = role.id == user.roles[0].id;
+                                $('#role').append(
+                                    `<option ${isSelected ? 'selected' : ''} value="${role.name}">${role.name}</option>`
+                                );
+                            });
+                        });
+
+                        $('#myModal .modal-title').text('Edit Data');
+                        $('#myModal').modal('show');
+                    } else {
+                        console.error('Gagal mendapatkan detail pengguna.');
+                    }
+                });
+            });
 
             $('body').on('click', '.btnDelete', function(e) {
                 e.preventDefault();
@@ -156,7 +248,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         var url =
-                            '{{ route('permissions.destroy', ':id') }}';
+                            '{{ route('users.destroy', ':id') }}';
                         url = url.replace(':id', id);
                         $.ajax({
                             url: url,
@@ -169,7 +261,7 @@
 
                             },
                             error: function(response) {
-                                sweetalert('error', response.responseJSON.errors
+                                sweetalert('success', response.responseJSON.errors
                                     .name);
                             }
                         })

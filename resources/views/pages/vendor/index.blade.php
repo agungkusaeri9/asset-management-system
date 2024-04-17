@@ -5,8 +5,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h4 class="card-title mb-3">Permission</h4>
-                        @can('Permission Create')
+                        <h4 class="card-title mb-3">Vendor</h4>
+                        @can('Vendor Create')
                             <a href="javascript:void(0)" class="btn btn-sm btn-primary mb-3 btnAdd"><i class="fas fa-plus"></i>
                                 Tambah Data</a>
                         @endcan
@@ -17,7 +17,10 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Nama</th>
-                                    @canany(['Permission Edit', 'Permission Delete'])
+                                    <th>Email</th>
+                                    <th>Nomor Telepon</th>
+                                    <th>Alamat</th>
+                                    @canany(['Vendor Edit', 'Vendor Delete'])
                                         <th>Aksi</th>
                                     @endcanany
                                 </tr>
@@ -48,8 +51,23 @@
                         @csrf
                         <input type="number" id="id" name="id" hidden>
                         <div class="form-group">
-                            <label for="name">Nama</label>
-                            <input type="text" class="form-control" name="name" id="name">
+                            <label for="nama">Nama</label>
+                            <input type="text" class="form-control" name="nama" id="nama">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" name="email" id="email">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nomor_telepon">Nomor Telepon</label>
+                            <input type="text" class="form-control" name="nomor_telepon" id="nomor_telepon">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <textarea name="alamat" id="alamat" cols="30" rows="4" class="form-control"></textarea>
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
@@ -82,7 +100,7 @@
             let otable = $('.dtTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('permissions.data') }}',
+                ajax: '{{ route('vendor.data') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -90,8 +108,20 @@
                         searchable: false
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'nama',
+                        name: 'nama'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'nomor_telepon',
+                        name: 'nomor_telepon'
+                    },
+                    {
+                        data: 'alamat',
+                        name: 'alamat'
                     },
                     {
                         data: 'action',
@@ -109,7 +139,7 @@
                 e.preventDefault();
                 let form = $('#myModal #myForm');
                 $.ajax({
-                    url: '{{ route('permissions.store') }}',
+                    url: '{{ route('vendor.store') }}',
                     type: 'POST',
                     dataType: 'JSON',
                     data: form.serialize(),
@@ -132,22 +162,52 @@
                 })
             })
 
+            let getDetail = function(id, callback) {
+                $.ajax({
+                    url: '{{ route('vendor.getById') }}',
+                    type: 'GET',
+                    data: {
+                        id
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+                        callback(response);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        callback(null);
+                    }
+                });
+            };
+
             $('body').on('click', '.btnEdit', function() {
-                let id = $(this).data('id');
-                let name = $(this).data('name');
-                $('#myForm #id').val(id);
-                $('#myForm #name').val(name);
-                $('#myModal .modal-title').text('Edit Data');
-                $('#myModal').modal('show');
+                $('body').on('click', '.btnEdit', function() {
+                    let id = $(this).data('id');
+                    let nama = $(this).data('nama');
+
+                    getDetail(id, function(response) {
+                        let data = response.data;
+                        $('#myForm #id').val(data.id);
+                        $('#myForm #nama').val(data.nama);
+                        $('#myForm #email').val(data.email);
+                        $('#myForm #nomor_telepon').val(data.nomor_telepon);
+                        $('#myForm #alamat').val(data.alamat);
+                        $('#myModal .modal-title').text('Edit Data');
+                        $('#myModal').modal('show');
+                    });
+                });
             })
+
+
+
 
             $('body').on('click', '.btnDelete', function(e) {
                 e.preventDefault();
                 let id = $(this).data('id');
-                let name = $(this).data('name');
+                let nama = $(this).data('nama');
                 Swal.fire({
                     title: 'Apakah Yakin?',
-                    text: `${name} akan dihapus dan tidak bisa dikembalikan!`,
+                    text: `${nama} akan dihapus dan tidak bisa dikembalikan!`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -156,7 +216,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         var url =
-                            '{{ route('permissions.destroy', ':id') }}';
+                            '{{ route('vendor.destroy', ':id') }}';
                         url = url.replace(':id', id);
                         $.ajax({
                             url: url,
