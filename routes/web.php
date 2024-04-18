@@ -7,6 +7,7 @@ use App\Http\Controllers\JenisController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SistemOperasiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('department/data', [DepartmentController::class, 'data'])->name('department.data');
     Route::resource('department', DepartmentController::class)->except('create', 'edit', 'update');
+
+    Route::get('sistem_operasi/data', [SistemOperasiController::class, 'data'])->name('sistem_operasi.data');
+    Route::resource('sistem_operasi', SistemOperasiController::class)->except('create', 'edit', 'update');
 
     Route::get('vendor/data', [VendorController::class, 'data'])->name('vendor.data');
     Route::get('vendor/getById', [VendorController::class, 'getById'])->name('vendor.getById');
