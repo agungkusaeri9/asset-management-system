@@ -5,6 +5,8 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\JenisController;
+use App\Http\Controllers\KomponenController;
+use App\Http\Controllers\KomponenDetailController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -66,4 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::get('vendor/data', [VendorController::class, 'data'])->name('vendor.data');
     Route::get('vendor/getById', [VendorController::class, 'getById'])->name('vendor.getById');
     Route::resource('vendor', VendorController::class)->except('create', 'edit', 'update');
+
+    Route::resource('komponen', KomponenController::class)->except('show');
+    Route::resource('komponen-detail', KomponenDetailController::class)->except('show');
 });
