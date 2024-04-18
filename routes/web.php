@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AplikasiController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
@@ -58,6 +59,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('sistem_operasi/data', [SistemOperasiController::class, 'data'])->name('sistem_operasi.data');
     Route::resource('sistem_operasi', SistemOperasiController::class)->except('create', 'edit', 'update');
+
+    Route::get('aplikasi/data', [AplikasiController::class, 'data'])->name('aplikasi.data');
+    Route::resource('aplikasi', AplikasiController::class)->except('create', 'edit', 'update');
 
     Route::get('vendor/data', [VendorController::class, 'data'])->name('vendor.data');
     Route::get('vendor/getById', [VendorController::class, 'getById'])->name('vendor.getById');

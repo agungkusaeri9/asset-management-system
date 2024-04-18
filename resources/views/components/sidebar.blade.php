@@ -31,6 +31,9 @@
                         <a class="nav-link" href="{{ route('sistem_operasi.index') }}"> Sistem Operasi </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('aplikasi.index') }}"> Aplikasi </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('users.index') }}"> User </a>
                     </li>
                     <li class="nav-item">
