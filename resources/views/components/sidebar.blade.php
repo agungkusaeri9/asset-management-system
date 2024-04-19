@@ -2,9 +2,44 @@
     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link py-2" href="{{ route('dashboard') }}">
-                <i class="mdi mdi-chart-line  pr-2 icon-large"></i>
+                <i class="mdi mdi-monitor-dashboard  pr-2 icon-large"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
+        <li class="nav-item">
+            <a class="nav-link py-2" href="{{ route('komputer.index') }}">
+                <i class="mdi mdi-laptop  pr-2 icon-large"></i>
+                <span class="menu-title">Komputer</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#kerusakan" aria-expanded="false"
+                aria-controls="kerusakan">
+                <i class="mdi mdi-wrench  pr-2 icon-large"></i>
+                <span class="menu-title">Kerusakan</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="kerusakan">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('kerusakan-komputer.index') }}"> Komputer </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#pergantian" aria-expanded="false"
+                aria-controls="pergantian">
+                <i class="mdi mdi-swap-horizontal  pr-2 icon-large"></i>
+                <span class="menu-title">Pergantian</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="pergantian">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('pergantian-komputer.index') }}"> Komputer </a>
+                    </li>
+                </ul>
+            </div>
         </li>
         @canany(['Role Index', 'Permission Index', 'User Index'])
             <li class="nav-item">

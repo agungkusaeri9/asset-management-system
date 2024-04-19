@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SistemOperasi extends Model
+class SistemOperasiDetail extends Model
 {
     use HasFactory;
-    protected $table = 'sistem_operasi';
+    protected $table = 'sistem_operasi_detail';
     protected $guarded = ['id'];
-
 
     protected static function boot()
     {
@@ -19,10 +18,5 @@ class SistemOperasi extends Model
         static::creating(function ($model) {
             $model->uuid = \Str::uuid();
         });
-    }
-
-    public function details()
-    {
-        return $this->hasMany(SistemOperasiDetail::class, 'sistem_operasi_id', 'id');
     }
 }

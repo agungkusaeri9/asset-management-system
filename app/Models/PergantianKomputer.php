@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SistemOperasi extends Model
+class PergantianKomputer extends Model
 {
     use HasFactory;
-    protected $table = 'sistem_operasi';
+    protected $table = 'pergantian_komputer';
     protected $guarded = ['id'];
 
 
@@ -21,8 +21,9 @@ class SistemOperasi extends Model
         });
     }
 
-    public function details()
+
+    public function komputer()
     {
-        return $this->hasMany(SistemOperasiDetail::class, 'sistem_operasi_id', 'id');
+        return $this->belongsTo(Komputer::class, 'komputer_id', 'id');
     }
 }

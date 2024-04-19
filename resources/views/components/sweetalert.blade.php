@@ -12,7 +12,7 @@
                     title: 'Berhasil!',
                     text: '{{ session('success') }}',
                     showConfirmButton: true,
-                    timer: 1500
+                    timer: 3500
                 })
             })
         </script>
@@ -25,7 +25,7 @@
                     title: 'Gagal!',
                     text: '{{ session('error') }}',
                     showConfirmButton: true,
-                    timer: 1500
+                    timer: 3500
                 })
             })
         </script>

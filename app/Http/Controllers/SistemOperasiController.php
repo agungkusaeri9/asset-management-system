@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SistemOperasi;
+use App\Models\SistemOperasiDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -109,5 +110,13 @@ class SistemOperasiController extends Controller
             $response = ['status' => 'error', 'messaage' => $th->getMessage()];
         }
         return response()->json($response);
+    }
+
+    public function detail()
+    {
+        if (request()->ajax()) {
+            $items = SistemOperasiDetail::where('sistem_operasi_id', request('id'))->get();
+            return response()->json($items);
+        }
     }
 }

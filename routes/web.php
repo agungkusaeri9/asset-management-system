@@ -5,14 +5,18 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\JenisController;
+use App\Http\Controllers\KerusakanKomputerController;
 use App\Http\Controllers\KomponenController;
 use App\Http\Controllers\KomponenDetailController;
+use App\Http\Controllers\KomputerController;
+use App\Http\Controllers\PergantianKomputerController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SistemOperasiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
+use App\Models\KerusakanKomputer;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,7 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('department', DepartmentController::class)->except('create', 'edit', 'update');
 
     Route::get('sistem_operasi/data', [SistemOperasiController::class, 'data'])->name('sistem_operasi.data');
-    Route::resource('sistem_operasi', SistemOperasiController::class)->except('create', 'edit', 'update');
+    Route::resource('sistem_operasi', SistemOperasiController::class)->except('create', 'edit', 'update', 'show');
+    Route::get('sistem-operasi/detail', [SistemOperasiController::class, 'detail'])->name('sistem-operasi.detail');
 
     Route::get('aplikasi/data', [AplikasiController::class, 'data'])->name('aplikasi.data');
     Route::resource('aplikasi', AplikasiController::class)->except('create', 'edit', 'update');
@@ -71,4 +76,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('komponen', KomponenController::class)->except('show');
     Route::resource('komponen-detail', KomponenDetailController::class)->except('show');
+
+    Route::resource('komputer', KomputerController::class);
+    Route::resource('pergantian-komputer', PergantianKomputerController::class);
+    Route::resource('kerusakan-komputer', KerusakanKomputerController::class);
 });
